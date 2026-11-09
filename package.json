@@ -1,0 +1,27 @@
+{
+  "name": "martynov-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Персональный сайт-портфолио Егора Мартынова — Web Development / Technical SEO",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "media:placeholders": "node scripts/generate-placeholders.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource-variable/onest": "^5.3.1",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "astro": "^7.4.7",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.2"
+  }
+}

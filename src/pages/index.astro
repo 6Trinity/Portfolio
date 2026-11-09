@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Work from '../components/sections/Work.astro';
+import Marquee from '../components/sections/Marquee.astro';
+import Services from '../components/sections/Services.astro';
+import Approach from '../components/sections/Approach.astro';
+import About from '../components/sections/About.astro';
+import Contact from '../components/sections/Contact.astro';
+
+import { getFeaturedProjects, getPublishedProjects } from '../lib/projects';
+import { absoluteUrl, site } from '../lib/helpers';
+import { graph, personSchema, profilePageSchema, projectListSchema, websiteSchema } from '../lib/seo';
+
+const featured = await getFeaturedProjects();
+const all = await getPublishedProjects();
+
+const jsonLd = graph(
+  personSchema(),
+  websiteSchema(),
+  profilePageSchema(site.title, site.description),
+  projectListSchema(all),
+);
+---
+
+<BaseLayout
+  title={site.title}
+  description={site.description}
+  canonical={absoluteUrl('/')}
+  ogType="profile"
+  jsonLd={jsonLd}
+  rawTitle
+  overlayHeader
+  page="home"
+>
+  <div class="home">
+    <Hero />
+    <Work projects={featured} />
+    <Marquee />
+    <Services />
+    <Approach />
+    <About />
+    <Contact />
+  </div>
+</BaseLayout>

@@ -1,0 +1,36 @@
+{
+  "experience": [
+    {
+      "company": "Tetriz Architects",
+      "position": "SEO-специалист / веб-мастер",
+      "period": "",
+      "description": "Техническая оптимизация сайтов на Tilda, структура коммерческих страниц, перелинковка и работа с контентными кластерами."
+    },
+    {
+      "company": "МКС — Модуль Каркас Строй",
+      "position": "Web-разработчик / SEO-специалист",
+      "period": "",
+      "description": "Разработка многостраничного сайта компании: структура, дизайн, вёрстка, интерактивные блоки, интеграции и техническое SEO."
+    },
+    {
+      "company": "Первый БИТ",
+      "position": "Программист 1С",
+      "period": "",
+      "description": "Программная разработка, работа с данными и бизнес-логикой учётных систем."
+    }
+  ],
+  "skills": [
+    {
+      "group": "Development",
+      "items": ["JavaScript", "HTML", "CSS", "SCSS", "Vite", "Node.js", "Git", "GitHub"]
+    },
+    {
+      "group": "SEO",
+      "items": ["Technical SEO", "Яндекс.Вебмастер", "Google Search Console", "Schema.org", "JSON-LD", "Core Web Vitals"]
+    },
+    {
+      "group": "Design & Analytics",
+      "items": ["Figma", "Tilda", "Яндекс.Метрика", "Google PageSpeed"]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+---
+/**
+ * Тонкая бегущая строка между секциями — часть айдентики,
+ * а не контейнер с информацией. Останавливается при reduced motion.
+ */
+const items = [
+  'Web Development',
+  'Technical SEO',
+  'UI/UX',
+  'Landing Pages',
+  'Core Web Vitals',
+  'Schema.org',
+  'Analytics',
+  'Performance',
+];
+const row = [...items, ...items];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {
+      row.map((item) => (
+        <span class="marquee__item">
+          {item}
+          <span class="marquee__dot" />
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    padding-block: 1.4rem;
+    border-block: 1px solid var(--color-line);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marquee__track {
+      animation: marquee 46s linear infinite;
+    }
+  }
+
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.5rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .marquee__dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0.7;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+</style>

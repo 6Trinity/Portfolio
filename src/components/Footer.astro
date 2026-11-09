@@ -1,0 +1,138 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../lib/helpers';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__copy">
+        <span>© {year} {site.name}</span>
+        <span class="site-footer__sep" aria-hidden="true">—</span>
+        <span class="mono site-footer__role">Web Development / Technical SEO</span>
+      </p>
+    </div>
+
+    <nav class="site-footer__social" aria-label="Социальные ссылки">
+      <a href={site.telegram} target="_blank" rel="noopener noreferrer" class="site-footer__link">
+        <Icon name="telegram" size={15} />
+        Telegram
+      </a>
+      <a href={site.github} target="_blank" rel="noopener noreferrer" class="site-footer__link">
+        <Icon name="github" size={15} />
+        GitHub
+      </a>
+      <a href={`mailto:${site.email}`} class="site-footer__link">
+        <Icon name="mail" size={15} />
+        Email
+      </a>
+      <button type="button" class="site-footer__top" data-to-top>
+        Наверх
+        <span class="site-footer__top-icon" aria-hidden="true">
+          <Icon name="up" size={14} />
+        </span>
+      </button>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    padding-block: var(--space-6) var(--space-7);
+    border-top: 1px solid var(--color-line);
+    margin-top: var(--space-8);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .site-footer__copy {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .site-footer__sep {
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__role {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__social {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .site-footer__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 40px;
+    padding: 0 0.85rem;
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+  }
+
+  .site-footer__link:hover {
+    color: var(--color-text);
+    background: rgba(244, 243, 240, 0.04);
+  }
+
+  .site-footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 40px;
+    padding: 0 0.35rem 0 0.85rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  }
+
+  .site-footer__top-icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(183, 108, 250, 0.14);
+    color: var(--color-accent);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .site-footer__top:hover {
+    color: var(--color-text);
+    border-color: var(--color-line-accent);
+  }
+
+  .site-footer__top:hover .site-footer__top-icon {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 640px) {
+    .site-footer__inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

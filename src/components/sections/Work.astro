@@ -1,0 +1,488 @@
+---
+import Icon from '../Icon.astro';
+import MediaImage from '../MediaImage.astro';
+import { home, pad } from '../../lib/helpers';
+import type { ProjectView } from '../../lib/projects';
+
+interface Props {
+  projects: ProjectView[];
+}
+
+const { projects } = Astro.props;
+const { work } = home;
+const total = projects.length;
+---
+
+<section class="work section" id="work" aria-labelledby="work-title" data-carousel="edge">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div class="section-head__top">
+        <span class="section-head__index mono">01</span>
+        <span class="section-head__label">{work.eyebrow}</span>
+      </div>
+      <div class="section-head__row">
+        <h2 class="section-head__title" id="work-title">
+          {work.title}
+        </h2>
+        <div class="work__head-aside">
+          <p class="section-head__subtitle">{work.subtitle}</p>
+          <a href={work.allLinkHref} class="link-arrow work__all work__all--top">
+            {work.allLinkLabel}
+            <span class="mono">({pad(total)})</span>
+            <Icon name="arrow-up-right" size={14} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {
+    total > 0 ? (
+      <div class="work__viewer" data-reveal>
+        <div
+          class="work__track"
+          id="work-track"
+          data-carousel-track
+          role="region"
+          aria-roledescription="карусель"
+          aria-label="Избранные проекты"
+          tabindex="0"
+        >
+          {projects.map((project, index) => (
+            <article
+              class="work-card"
+              data-carousel-slide
+              data-title={project.data.title}
+              aria-roledescription="слайд"
+              aria-label={`${index + 1} из ${total}: ${project.data.title}`}
+            >
+              <a href={project.href} class="work-card__link" aria-label={`Открыть проект: ${project.data.title}`}>
+                <div class="work-card__media">
+                  <MediaImage
+                    src={project.data.cover.src}
+                    alt={project.data.cover.alt || project.data.title}
+                    sizes="(max-width: 767px) 86vw, (max-width: 1200px) 72vw, 900px"
+                    priority={index === 0}
+                  />
+                  <span class="work-card__scrim" aria-hidden="true" />
+                  <span class="work-card__index mono" aria-hidden="true">
+                    {pad(index + 1)}
+                  </span>
+                  <span class="work-card__open" aria-hidden="true">
+                    <Icon name="arrow-up-right" size={18} />
+                  </span>
+                </div>
+
+                <div class="work-card__body">
+                  <div class="work-card__meta">
+                    <p class="work-card__category mono">{project.data.category.join(' / ')}</p>
+                    {project.data.year > 0 && <p class="work-card__year mono">{project.data.year}</p>}
+                  </div>
+                  <h3 class="work-card__title">{project.data.title}</h3>
+                  <p class="work-card__summary">{project.data.summary}</p>
+                  {project.data.technologies.length > 0 && (
+                    <p class="work-card__tech mono">{project.data.technologies.slice(0, 4).join(' / ')}</p>
+                  )}
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <div class="container">
+        <p class="work__empty">Проекты появятся здесь после публикации в CMS.</p>
+      </div>
+    )
+  }
+
+  {
+    total > 0 && (
+      <div class="container">
+        <div class="work__controls">
+          <div class="work__counter" aria-live="polite" aria-atomic="true">
+            <span class="work__counter-current mono" data-carousel-current>
+              01
+            </span>
+            <span class="work__counter-sep" aria-hidden="true">
+              /
+            </span>
+            <span class="work__counter-total mono" data-carousel-total>
+              {pad(total)}
+            </span>
+          </div>
+
+          <div class="work__progress" aria-hidden="true">
+            <div class="work__progress-bar" data-carousel-progress></div>
+          </div>
+
+          <div class="work__buttons">
+            <a href={work.allLinkHref} class="link-arrow work__all work__all--bottom">
+              {work.allLinkLabel}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+            <button type="button" class="icon-btn" data-carousel-prev aria-label="Предыдущий проект" aria-controls="work-track">
+              <Icon name="arrow-left" size={18} />
+            </button>
+            <button type="button" class="icon-btn" data-carousel-next aria-label="Следующий проект" aria-controls="work-track">
+              <Icon name="arrow-right" size={18} />
+            </button>
+          </div>
+          <p class="visually-hidden" data-carousel-status aria-live="polite"></p>
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .work {
+    padding-bottom: clamp(4rem, 3rem + 5vw, 7rem);
+  }
+
+  .work__head-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .work__all {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .work__all :global(.mono) {
+    color: var(--color-text-muted);
+    font-size: inherit;
+    letter-spacing: inherit;
+  }
+
+  .work__all--bottom {
+    display: none;
+  }
+
+  /* ── Трек ── */
+  .work__viewer {
+    position: relative;
+  }
+
+  .work__track {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+    padding-block: 0.5rem clamp(1.5rem, 3vw, 2.5rem);
+    padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+  }
+
+  .work__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+
+  .work__track.is-dragging :global(a) {
+    pointer-events: none;
+  }
+
+  .work__track:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* ── Карточка ── */
+  .work-card {
+    flex: 0 0 auto;
+    width: clamp(280px, 68vw, 860px);
+    scroll-snap-align: center;
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .work-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .work-card__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    transition:
+      border-color var(--dur-slow) var(--ease-out),
+      box-shadow var(--dur-slow) var(--ease-out);
+  }
+
+  .work-card__media :global(img),
+  .work-card__media :global(.media-image) {
+    transition: transform 900ms var(--ease-out), filter var(--dur-slow) var(--ease-out);
+  }
+
+  .work-card__media :global(img) {
+    filter: saturate(0.72) brightness(0.86);
+  }
+
+  .work-card__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 12, 16, 0.1) 0%, rgba(11, 12, 16, 0) 35%, rgba(11, 12, 16, 0.55) 100%);
+    pointer-events: none;
+    transition: opacity var(--dur-slow) var(--ease-out);
+  }
+
+  .work-card__index {
+    position: absolute;
+    top: 1rem;
+    left: 1.15rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background: rgba(11, 12, 16, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--color-text);
+    font-size: 0.625rem;
+  }
+
+  .work-card__open {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(244, 243, 240, 0.18);
+    background: rgba(20, 21, 26, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--color-text);
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out);
+  }
+
+  .work-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: clamp(1rem, 1.6vw, 1.5rem) 0.4rem 0;
+  }
+
+  .work-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .work-card__category {
+    color: var(--color-accent);
+    letter-spacing: 0.1em;
+    font-size: 0.6875rem;
+  }
+
+  .work-card__year {
+    color: var(--color-text-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+
+  .work-card__title {
+    font-size: var(--fs-lg);
+    font-weight: 500;
+  }
+
+  .work-card__summary {
+    max-width: 62ch;
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  .work-card__tech {
+    margin-top: 0.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Активная карточка: крупнее и ярче соседних. */
+  .work-card:not(.is-active) {
+    transform: scale(0.94);
+    transform-origin: center;
+    opacity: 0.58;
+  }
+
+  .work-card.is-active .work-card__media {
+    border-color: var(--color-line-strong);
+    box-shadow:
+      0 30px 90px -40px rgba(183, 108, 250, 0.55),
+      0 0 0 1px rgba(183, 108, 250, 0.16);
+  }
+
+  .work-card.is-active .work-card__media :global(img) {
+    filter: saturate(1) brightness(1);
+  }
+
+  .work-card.is-active .work-card__open {
+    opacity: 1;
+    transform: none;
+  }
+
+  .work-card:not(.is-active) .work-card__body {
+    opacity: 0.75;
+    transition: opacity var(--dur-slow) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .work-card__link:hover .work-card__media :global(img) {
+      transform: scale(1.03);
+    }
+
+    .work-card__link:hover .work-card__open {
+      opacity: 1;
+      transform: none;
+      background: var(--color-accent);
+      border-color: transparent;
+    }
+  }
+
+  .work-card__link:focus-visible {
+    outline-offset: 6px;
+  }
+
+  /* ── Управление ── */
+  .work__controls {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    margin-top: clamp(1.25rem, 2vw, 2rem);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .work__counter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .work__counter-current {
+    color: var(--color-text);
+    font-size: var(--fs-md);
+    letter-spacing: 0.04em;
+  }
+
+  .work__counter-sep {
+    color: var(--color-text-muted);
+  }
+
+  .work__counter-total {
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .work__progress {
+    position: relative;
+    height: 1px;
+    background: var(--color-line-strong);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .work__progress-bar {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-pink));
+    transform-origin: left center;
+    transform: scaleX(0.06);
+    transition: transform 200ms linear;
+  }
+
+  .work__buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .work__empty {
+    padding: 3rem;
+    border: 1px dashed var(--color-line-strong);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+
+  @media (max-width: 960px) {
+    .work-card {
+      width: clamp(260px, 74vw, 700px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .work-card {
+      width: 86vw;
+      transform-origin: center;
+    }
+
+    /* На вертикальном экране кадр 4:3 даёт больше места интерфейсу на скриншоте. */
+    .work-card__media {
+      aspect-ratio: 4 / 3;
+    }
+
+    .work-card:not(.is-active) {
+      transform: scale(0.96);
+    }
+
+    .work__controls {
+      grid-template-columns: auto auto;
+      grid-template-areas:
+        'counter buttons'
+        'progress progress';
+      row-gap: var(--space-4);
+    }
+
+    .work__counter {
+      grid-area: counter;
+    }
+
+    .work__buttons {
+      grid-area: buttons;
+      justify-self: end;
+    }
+
+    .work__progress {
+      grid-area: progress;
+    }
+
+    .work__all--top {
+      display: none;
+    }
+
+    .work__all--bottom {
+      display: inline-flex;
+    }
+  }
+</style>

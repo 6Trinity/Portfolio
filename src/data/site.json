@@ -1,0 +1,18 @@
+{
+  "name": "Егор Мартынов",
+  "monogram": "EM",
+  "role": "Web Developer / Technical SEO",
+  "title": "Егор Мартынов — веб-разработчик и специалист по техническому SEO",
+  "description": "Разрабатываю коммерческие сайты и лендинги, проектирую интерфейсы и занимаюсь технической поисковой оптимизацией — от структуры и вёрстки до аналитики.",
+  "url": "https://6trinity.github.io",
+  "basePath": "/Portfolio/",
+  "locale": "ru_RU",
+  "lang": "ru",
+  "ogImage": "/media/og/og-default.png",
+  "favicon": "/favicon.svg",
+  "email": "egor.martynov.03@gmail.com",
+  "telegram": "https://t.me/Siegkls",
+  "telegramHandle": "@Siegkls",
+  "github": "https://github.com/6Trinity",
+  "githubHandle": "6Trinity"
+}

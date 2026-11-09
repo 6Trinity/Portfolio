@@ -1,0 +1,415 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site } from '../lib/helpers';
+
+interface Props {
+  overlay?: boolean;
+  currentPath: string;
+}
+
+const { overlay = false } = Astro.props;
+
+const links = [
+  { href: '/#work', label: 'Работы', match: ['/projects'] },
+  { href: '/#services', label: 'Услуги', match: ['/#services'] },
+  { href: '/#about', label: 'Обо мне', match: ['/#about'] },
+  { href: '/#contact', label: 'Контакты', match: ['/#contact'] },
+];
+---
+
+<header class:list={['site-header', { 'site-header--overlay': overlay }]} data-header>
+  <div class="site-header__inner container">
+    <a href="/" class="site-header__brand" aria-label={`${site.name} — на главную`}>
+      <Logo gradientId="logo-grad-header" />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Основная навигация">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} class="nav-link" data-nav-link>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href="/#contact" class="btn btn--accent btn--sm site-header__cta" data-nav-link>
+        Обсудить проект
+        <Icon name="arrow-up-right" size={15} />
+      </a>
+
+      <button
+        type="button"
+        class="burger"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Открыть меню"
+        data-menu-toggle
+      >
+        <span class="burger__lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+        <span class="burger__text" aria-hidden="true">Меню</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-menu hidden>
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label="Меню сайта">
+    <div class="mobile-menu__head">
+      <span class="mono mobile-menu__label">Навигация</span>
+      <button type="button" class="icon-btn" aria-label="Закрыть меню" data-menu-close>
+        <Icon name="close" size={18} />
+      </button>
+    </div>
+
+    <nav aria-label="Мобильная навигация">
+      <ul class="mobile-menu__list">
+        {
+          links.map((link, index) => (
+            <li>
+              <a href={link.href} class="mobile-menu__link" data-nav-link data-menu-link>
+                <span class="mobile-menu__index mono">{String(index + 1).padStart(2, '0')}</span>
+                <span class="mobile-menu__text">{link.label}</span>
+                <Icon name="arrow-up-right" size={18} class="mobile-menu__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="mobile-menu__foot">
+      <a href="/#contact" class="btn btn--accent btn--block" data-nav-link data-menu-link>
+        Обсудить проект
+        <Icon name="arrow-right" size={16} />
+      </a>
+      <div class="mobile-menu__contacts">
+        <a href={site.telegram} target="_blank" rel="noopener noreferrer" class="mobile-menu__contact">
+          <Icon name="telegram" size={16} />
+          {site.telegramHandle}
+        </a>
+        <a href={`mailto:${site.email}`} class="mobile-menu__contact">
+          <Icon name="mail" size={16} />
+          {site.email}
+        </a>
+        <a href={site.github} target="_blank" rel="noopener noreferrer" class="mobile-menu__contact">
+          <Icon name="github" size={16} />
+          {site.githubHandle}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: var(--z-header);
+    height: var(--header-h);
+    transition:
+      height var(--dur-slow) var(--ease-out),
+      background-color var(--dur-slow) var(--ease-out),
+      border-color var(--dur-slow) var(--ease-out),
+      backdrop-filter var(--dur-slow) var(--ease-out),
+      box-shadow var(--dur-slow) var(--ease-out);
+    border-bottom: 1px solid transparent;
+  }
+
+  .site-header.is-scrolled,
+  .site-header.is-open {
+    height: var(--header-h-scrolled);
+    border-bottom-color: var(--color-line);
+    background: rgba(11, 12, 16, 0.72);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 0 12px 40px -30px rgba(0, 0, 0, 0.9);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    height: 100%;
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    border-radius: 14px;
+    flex: none;
+  }
+
+  .site-header__nav {
+    margin-inline-start: auto;
+  }
+
+  .site-header__nav ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1vw, 0.75rem);
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0.28rem;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0;
+    transform: translate(-50%, 4px);
+    transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: none;
+  }
+
+  /* ── Бургер ── */
+  .burger {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0 0.35rem;
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+  }
+
+  .burger__lines {
+    position: relative;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+  }
+
+  .burger__lines span {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1.5px;
+    margin-top: -0.75px;
+    border-radius: 2px;
+    background: currentColor;
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      width var(--dur-base) var(--ease-out),
+      top var(--dur-base) var(--ease-out);
+  }
+
+  .burger__lines span:first-child {
+    transform: translateY(-4px);
+  }
+
+  .burger__lines span:last-child {
+    width: 70%;
+    transform: translateY(4px);
+  }
+
+  .burger__text {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .burger[aria-expanded='true'] .burger__lines span:first-child {
+    transform: rotate(45deg);
+  }
+
+  .burger[aria-expanded='true'] .burger__lines span:last-child {
+    width: 100%;
+    transform: rotate(-45deg);
+  }
+
+  /* ── Мобильное меню ── */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-menu);
+    display: grid;
+    place-items: end stretch;
+    padding: calc(var(--header-h-scrolled) + 0.75rem) var(--gutter) var(--gutter);
+    background: rgba(8, 9, 12, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+
+  .mobile-menu[hidden] {
+    display: none !important;
+  }
+
+  .mobile-menu.is-open {
+    opacity: 1;
+  }
+
+  .mobile-menu__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--space-5);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xl);
+    background: rgba(20, 21, 26, 0.94);
+    box-shadow: var(--shadow-card);
+    transform: translateY(24px);
+    opacity: 0;
+    transition:
+      transform 420ms var(--ease-out),
+      opacity 320ms var(--ease-out);
+  }
+
+  .mobile-menu.is-open .mobile-menu__panel {
+    transform: none;
+    opacity: 1;
+  }
+
+  .mobile-menu__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mobile-menu__label {
+    color: var(--color-text-muted);
+  }
+
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-menu__list li + li {
+    border-top: 1px solid var(--color-line);
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 62px;
+    padding-block: 0.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 1rem + 2vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .mobile-menu__index {
+    color: var(--color-text-muted);
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .mobile-menu__text {
+    flex: 1;
+  }
+
+  .mobile-menu__arrow {
+    color: var(--color-text-muted);
+    transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+
+  .mobile-menu__link:hover,
+  .mobile-menu__link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .mobile-menu__link:hover .mobile-menu__arrow {
+    transform: translate(2px, -2px);
+    color: var(--color-accent);
+  }
+
+  .mobile-menu__link:hover .mobile-menu__index {
+    color: var(--color-mint);
+  }
+
+  .mobile-menu__foot {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .mobile-menu__contacts {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .mobile-menu__contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 40px;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .mobile-menu__contact:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 960px) {
+    .site-header__nav {
+      display: none;
+    }
+
+    .burger {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .site-header__cta {
+      display: none;
+    }
+  }
+</style>

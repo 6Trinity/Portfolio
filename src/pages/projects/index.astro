@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import MediaImage from '../../components/MediaImage.astro';
+import { absoluteUrl, pad } from '../../lib/helpers';
+import { getPublishedProjects } from '../../lib/projects';
+import { graph, breadcrumbSchema, personSchema, projectListSchema, websiteSchema } from '../../lib/seo';
+
+const projects = await getPublishedProjects();
+const title = 'Все проекты';
+const description =
+  'Архив работ: коммерческие сайты, лендинги, интерфейсы и проекты с технической оптимизацией. Формат — кейс с задачей, реализацией и результатом.';
+
+const jsonLd = graph(
+  personSchema(),
+  websiteSchema(),
+  projectListSchema(projects),
+  breadcrumbSchema([
+    { name: 'Главная', path: '/' },
+    { name: 'Проекты', path: '/projects/' },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} canonical={absoluteUrl('/projects/')} jsonLd={jsonLd} page="archive">
+  <div class="archive">
+    <div class="container archive__head">
+      <a href="/" class="breadcrumbs__link">
+        <Icon name="arrow-left" size={14} />
+        На главную
+      </a>
+      <div class="archive__heading">
+        <p class="mono archive__eyebrow">Портфолио / архив</p>
+        <h1 class="archive__title">Все проекты</h1>
+        <p class="archive__subtitle">
+          Подборка работ: от структуры и вёрстки до технического SEO. У каждой работы есть отдельная страница с
+          задачей, реализацией и результатом.
+        </p>
+      </div>
+      <p class="mono archive__count">
+        {pad(projects.length)} <span aria-hidden="true">/</span> проектов
+      </p>
+    </div>
+
+    <div class="container">
+      {
+        projects.length > 0 ? (
+          <ul class="archive__list">
+            {projects.map((project, index) => (
+              <li class="archive-card" data-reveal style={`--reveal-delay: ${index * 70}ms`}>
+                <a href={project.href} class="archive-card__link" aria-label={`Открыть проект: ${project.data.title}`}>
+                  <div class="archive-card__media">
+                    <MediaImage
+                      src={project.data.cover.src}
+                      alt={project.data.cover.alt || project.data.title}
+                      sizes="(max-width: 700px) 92vw, 400px"
+                      ratio="16 / 11"
+                      priority={index < 2}
+                    />
+                    <span class="archive-card__index mono" aria-hidden="true">
+                      {pad(index + 1)}
+                    </span>
+                  </div>
+                  <div class="archive-card__body">
+                    <p class="archive-card__meta mono">
+                      {project.data.category.join(' / ')}
+                      {project.data.year > 0 && <span>· {project.data.year}</span>}
+                    </p>
+                    <h2 class="archive-card__title">{project.data.title}</h2>
+                    <p class="archive-card__summary">{project.data.summary}</p>
+                    <span class="archive-card__more">
+                      Смотреть кейс
+                      <Icon name="arrow-up-right" size={14} />
+                    </span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="archive__empty">Проекты появятся здесь после публикации в CMS.</p>
+        )
+      }
+    </div>
+
+    <div class="container archive__cta">
+      <div>
+        <h2 class="archive__cta-title">Нужен сайт или техническая оптимизация?</h2>
+        <p class="archive__cta-text">Расскажите о задаче — предложу структуру и план работ.</p>
+      </div>
+      <a href="/#contact" class="btn btn--accent">
+        <Icon name="telegram" size={17} />
+        Обсудить проект
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .archive {
+    padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 4rem));
+    padding-bottom: var(--space-8);
+  }
+
+  .breadcrumbs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--color-text);
+  }
+
+  .archive__head {
+    display: grid;
+    gap: var(--space-5);
+    padding-bottom: clamp(2rem, 4vw, 3.5rem);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .archive__heading {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 46rem;
+  }
+
+  .archive__eyebrow {
+    color: var(--color-accent);
+  }
+
+  .archive__title {
+    font-size: var(--fs-3xl);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .archive__subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-md);
+    max-width: 56ch;
+  }
+
+  .archive__count {
+    color: var(--color-text-muted);
+  }
+
+  .archive__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 2rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .archive-card__link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--space-4);
+  }
+
+  .archive-card__media {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    transition: border-color var(--dur-base) var(--ease-out);
+  }
+
+  .archive-card__media :global(img) {
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .archive-card__index {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: rgba(11, 12, 16, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--color-text);
+    font-size: 0.625rem;
+  }
+
+  .archive-card__body {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .archive-card__meta {
+    display: flex;
+    gap: 0.5rem;
+    color: var(--color-accent);
+    font-size: 0.6875rem;
+  }
+
+  .archive-card__title {
+    font-size: var(--fs-lg);
+    font-weight: 500;
+  }
+
+  .archive-card__summary {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  .archive-card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .archive-card__link:hover .archive-card__media {
+    border-color: var(--color-line-accent);
+  }
+
+  .archive-card__link:hover .archive-card__media :global(img) {
+    transform: scale(1.025);
+  }
+
+  .archive-card__link:hover .archive-card__more {
+    color: var(--color-accent);
+  }
+
+  .archive__empty {
+    padding: 3rem;
+    border: 1px dashed var(--color-line-strong);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    color: var(--color-text-secondary);
+  }
+
+  .archive__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: var(--space-6);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(80% 120% at 100% 0%, rgba(183, 108, 250, 0.16), transparent 60%),
+      var(--color-surface);
+  }
+
+  .archive__cta-title {
+    font-size: var(--fs-xl);
+  }
+
+  .archive__cta-text {
+    margin-top: 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 760px) {
+    .archive__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

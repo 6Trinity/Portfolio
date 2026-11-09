@@ -1,0 +1,285 @@
+────────────────────────────────────────────────────────────── */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-text);
+  --btn-border: var(--color-line-strong);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  min-height: 52px;
+  padding: 0.85em 1.6em;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.btn svg {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:hover svg {
+  transform: translateX(3px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  --btn-bg: var(--color-text);
+  --btn-fg: #0b0c10;
+  --btn-border: transparent;
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background: #ffffff;
+  box-shadow: 0 10px 36px -12px rgba(244, 243, 240, 0.45);
+}
+
+.btn--accent {
+  --btn-fg: #ffffff;
+  --btn-border: rgba(183, 108, 250, 0.55);
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(183, 108, 250, 0.95), rgba(163, 92, 245, 0.85) 45%, rgba(236, 111, 210, 0.8));
+  box-shadow: 0 12px 40px -18px rgba(183, 108, 250, 0.9);
+}
+
+.btn--accent:hover {
+  --btn-border: rgba(236, 111, 210, 0.8);
+  box-shadow: 0 16px 50px -16px rgba(183, 108, 250, 0.95);
+}
+
+.btn--ghost {
+  --btn-bg: rgba(244, 243, 240, 0.03);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.btn--ghost:hover {
+  --btn-border: var(--color-line-accent);
+  --btn-bg: rgba(183, 108, 250, 0.08);
+}
+
+.btn--sm {
+  min-height: 42px;
+  padding: 0.6em 1.15em;
+  font-size: 0.8125rem;
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* Круглая иконочная кнопка */
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 50%;
+  background: rgba(244, 243, 240, 0.03);
+  color: var(--color-text);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-btn:hover {
+  border-color: var(--color-line-accent);
+  background: var(--color-accent-soft);
+  color: #ffffff;
+}
+
+.icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.icon-btn:disabled:hover {
+  border-color: var(--color-line-strong);
+  background: rgba(244, 243, 240, 0.03);
+  color: var(--color-text);
+}
+
+/* Текстовая ссылка со стрелкой */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.link-arrow svg {
+  width: 1em;
+  height: 1em;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.link-arrow:hover {
+  color: var(--color-text);
+}
+
+.link-arrow:hover svg {
+  transform: translate(2px, -2px);
+}
+
+/* ── Заголовок секции ───────────────────────────────────────────────────── */
+
+.section-head {
+  display: grid;
+  gap: var(--space-5);
+  margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+}
+
+.section-head__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.section-head__index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  color: var(--color-accent);
+}
+
+.section-head__index::before {
+  content: '';
+  width: 34px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.section-head__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.section-head__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  align-items: end;
+  gap: var(--space-6);
+}
+
+.section-head__title {
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  max-width: 18ch;
+}
+
+.section-head__title--wide {
+  max-width: 26ch;
+}
+
+.section-head__subtitle {
+  max-width: 38ch;
+  color: var(--color-text-secondary);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+}
+
+@media (max-width: 860px) {
+  .section-head__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .section-head__title,
+  .section-head__title--wide {
+    max-width: 100%;
+  }
+}
+
+/* ── Теги ───────────────────────────────────────────────────────────────── */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.42em 0.85em;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  background: rgba(244, 243, 240, 0.03);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ── Разделитель ────────────────────────────────────────────────────────── */
+
+.hairline {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--color-line-strong) 15%, var(--color-line-strong) 85%, transparent);
+}
+
+/* ── Стеклянная поверхность ─────────────────────────────────────────────── */
+
+.glass {
+  background: var(--color-glass);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+/* ── Утилиты ────────────────────────────────────────────────────────────── */
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.accent {
+  color: var(--color-accent);
+}

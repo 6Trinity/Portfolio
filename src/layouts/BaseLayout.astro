@@ -1,0 +1,85 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/onest';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/ui.css';
+
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../lib/helpers';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  jsonLd?: string;
+  rawTitle?: boolean;
+  /** Прозрачная шапка поверх hero. */
+  overlayHeader?: boolean;
+  /** Идентификатор страницы для клиентских скриптов. */
+  page?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType,
+  noindex,
+  jsonLd,
+  rawTitle,
+  overlayHeader = false,
+  page = 'default',
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang={site.lang} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0B0C10" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="generator" content={Astro.generator} />
+    <Seo
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+      noindex={noindex}
+      jsonLd={jsonLd}
+      rawTitle={rawTitle}
+    />
+  </head>
+  <body data-page={page}>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+    <Header overlay={overlayHeader} currentPath={currentPath} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <!-- Страховка: если JS не загрузился, контент всё равно должен быть виден. -->
+    <noscript>
+      <style>
+        [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>

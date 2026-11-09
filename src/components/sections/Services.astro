@@ -1,0 +1,258 @@
+---
+import Icon from '../Icon.astro';
+import { home, pad, services } from '../../lib/helpers';
+
+const { services: heading } = home;
+
+const icons = ['code', 'search', 'layers', 'flow', 'grid', 'spark'] as const;
+const iconFor = (name: string) =>
+  (icons as readonly string[]).includes(name) ? (name as (typeof icons)[number]) : 'spark';
+---
+
+<section class="services section" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__top" data-reveal>
+        <span class="section-head__index mono">02</span>
+        <span class="section-head__label">{heading.eyebrow}</span>
+      </div>
+      <div class="section-head__row">
+        <h2 class="section-head__title section-head__title--wide" id="services-title">
+          {heading.title}
+        </h2>
+        <p class="section-head__subtitle">{heading.subtitle}</p>
+      </div>
+    </div>
+
+    <ul class="services__grid">
+      {
+        services.map((service, index) => (
+          <li class="service-card" data-reveal style={`--reveal-delay: ${index * 80}ms`}>
+            <div class="service-card__top">
+              <span class="service-card__num mono">{pad(index + 1)}</span>
+              <span class="service-card__icon" aria-hidden="true">
+                <Icon name={iconFor(service.icon)} size={22} strokeWidth={1.4} />
+              </span>
+            </div>
+
+            <h3 class="service-card__title">{service.title}</h3>
+            {service.description && <p class="service-card__desc">{service.description}</p>}
+
+            {service.features.length > 0 && (
+              <ul class="service-card__list">
+                {service.features.map((feature) => (
+                  <li>
+                    <span class="service-card__bullet" aria-hidden="true" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <span class="service-card__arrow" aria-hidden="true">
+              <Icon name="arrow-up-right" size={16} />
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+
+  .service-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: clamp(1.35rem, 2.2vw, 2.15rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(180deg, rgba(244, 243, 240, 0.025), rgba(244, 243, 240, 0) 40%),
+      var(--color-surface);
+    overflow: hidden;
+    transition:
+      transform var(--dur-slow) var(--ease-out),
+      border-color var(--dur-slow) var(--ease-out),
+      background-color var(--dur-slow) var(--ease-out);
+  }
+
+  /* Мягкая подсветка, которая проявляется при наведении. */
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(60% 50% at 50% 0%, rgba(183, 108, 250, 0.55), transparent 70%);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    width: 80%;
+    height: 70%;
+    transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(183, 108, 250, 0.22), transparent);
+    filter: blur(30px);
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease-out);
+    pointer-events: none;
+  }
+
+  .service-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .service-card__num {
+    font-size: var(--fs-sm);
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .service-card__icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: rgba(244, 243, 240, 0.03);
+    color: var(--color-text-secondary);
+    transition:
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+  }
+
+  .service-card__title {
+    font-size: var(--fs-xl);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-top: 0.5rem;
+  }
+
+  .service-card__desc {
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+    max-width: 34ch;
+  }
+
+  .service-card__list {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 0.5rem;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-line);
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .service-card__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .service-card__bullet {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-top: 0.55em;
+    border-radius: 50%;
+    border: 1px solid var(--color-line-strong);
+    transition: background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out);
+  }
+
+  .service-card__arrow {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    margin-top: auto;
+    align-self: flex-end;
+    border-radius: 50%;
+    border: 1px solid var(--color-line);
+    color: var(--color-text-muted);
+    transition:
+      transform var(--dur-slow) var(--ease-out),
+      color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .service-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(183, 108, 250, 0.22);
+      background-color: var(--color-surface-elevated);
+    }
+
+    .service-card:hover::before,
+    .service-card:hover::after {
+      opacity: 1;
+    }
+
+    .service-card:hover .service-card__icon {
+      color: var(--color-accent);
+      border-color: rgba(183, 108, 250, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .service-card:hover .service-card__num {
+      color: var(--color-mint);
+    }
+
+    .service-card:hover .service-card__bullet {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    .service-card:hover .service-card__arrow {
+      color: var(--color-text);
+      border-color: var(--color-line-accent);
+      transform: translate(2px, -2px);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .services__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .service-card:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .services__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .service-card:last-child {
+      grid-column: auto;
+    }
+  }
+</style>

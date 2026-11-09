@@ -1,0 +1,100 @@
+---
+import { pad } from '../lib/helpers';
+
+interface Props {
+  index: number;
+  title: string;
+  id: string;
+}
+
+const { index, title, id } = Astro.props;
+---
+
+<section class="case-section" aria-labelledby={`case-${id}`}>
+  <div class="case-section__aside">
+    <p class="case-section__index mono">
+      {pad(index)} <span class="case-section__dash" aria-hidden="true"></span> {title}
+    </p>
+    <h2 class="case-section__title" id={`case-${id}`}>{title}</h2>
+  </div>
+  <div class="case-section__body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .case-section {
+    display: grid;
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+    gap: clamp(1rem, 4vw, 4rem);
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .case-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .case-section__aside {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    align-self: start;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .case-section__index {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-accent);
+    font-size: 0.6875rem;
+  }
+
+  .case-section__dash {
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  .case-section__title {
+    font-size: var(--fs-lg);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .case-section__body {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 68ch;
+    font-size: var(--fs-base);
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  .case-section__body :global(p) + :global(p) {
+    margin-top: 0.15rem;
+  }
+
+  .case-section__body :global(strong) {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 860px) {
+    .case-section {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .case-section__aside {
+      position: static;
+    }
+
+    .case-section__title {
+      font-size: var(--fs-md);
+    }
+  }
+</style>

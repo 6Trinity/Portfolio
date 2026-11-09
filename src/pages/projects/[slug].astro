@@ -1,0 +1,443 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import MediaImage from '../../components/MediaImage.astro';
+import CaseSection from '../../components/CaseSection.astro';
+import ProjectGallery from '../../components/ProjectGallery.astro';
+import ProjectNav from '../../components/ProjectNav.astro';
+import { absoluteUrl, site } from '../../lib/helpers';
+import { getNeighbours, getPublishedProjects, type ProjectView } from '../../lib/projects';
+import { graph, breadcrumbSchema, personSchema, projectSchema, websiteSchema } from '../../lib/seo';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const projects = await getPublishedProjects();
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project, projects },
+  }));
+};
+
+interface Props {
+  project: ProjectView;
+  projects: ProjectView[];
+}
+
+const { project, projects } = Astro.props;
+const { data, slug } = project;
+const { prev, next, index } = getNeighbours(projects, slug);
+
+const title = data.seoTitle || `${data.title} — кейс`;
+const description = data.seoDescription || data.summary;
+const canonical = absoluteUrl(`/projects/${slug}/`);
+// Социальное превью: загруженное в CMS — как есть, иначе сгенерированный баннер проекта.
+const ogImage = data.ogImage || `/og/${slug}.png`;
+
+const paragraphs = (value: string) =>
+  value
+    .split(/\n\s*\n/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+const numberedBlocks = [
+  { index: 1, id: 'overview', title: 'О проекте', text: data.overview },
+  { index: 2, id: 'challenge', title: 'Задача', text: data.challenge },
+  { index: 3, id: 'solution', title: 'Моё участие и реализация', text: data.solution },
+  { index: 4, id: 'results', title: 'Результат', text: data.results },
+].filter((block) => block.text.trim().length > 0);
+
+const metaFacts = [
+  { label: 'Клиент', value: data.client },
+  { label: 'Год', value: data.year > 0 ? String(data.year) : '' },
+  { label: 'Категория', value: data.category.join(' / ') },
+].filter((fact) => fact.value.trim().length > 0);
+
+const jsonLd = graph(
+  personSchema(),
+  websiteSchema(),
+  projectSchema({
+    title: data.title,
+    summary: description,
+    slug,
+    cover: data.cover.src,
+    year: data.year,
+    technologies: data.technologies,
+    websiteUrl: data.websiteUrl,
+  }),
+  breadcrumbSchema([
+    { name: 'Главная', path: '/' },
+    { name: 'Проекты', path: '/projects/' },
+    { name: data.title, path: `/projects/${slug}/` },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} ogImage={ogImage} ogType="article" jsonLd={jsonLd} page="project">
+  <article class="case">
+    <div class="container case__head">
+      <nav class="breadcrumbs" aria-label="Хлебные крошки">
+        <a href="/projects/" class="breadcrumbs__link">
+          <Icon name="arrow-left" size={14} />
+          Назад к работам
+        </a>
+        <span class="breadcrumbs__index mono" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+        </span>
+      </nav>
+
+      <div class="case__intro">
+        <div class="case__intro-main">
+          <p class="case__category mono">{data.category.join(' / ')}</p>
+          <h1 class="case__title">{data.title}</h1>
+          {data.summary && <p class="case__summary">{data.summary}</p>}
+        </div>
+
+        {
+          metaFacts.length > 0 && (
+            <dl class="case__facts">
+              {metaFacts.map((fact) => (
+                <div class="case__fact">
+                  <dt class="mono">{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )
+        }
+      </div>
+
+      {
+        (data.role || data.services.length > 0) && (
+          <div class="case__role">
+            {data.role && (
+              <div class="case__role-block">
+                <p class="mono case__label">Роль</p>
+                <p class="case__role-text">{data.role}</p>
+              </div>
+            )}
+            {data.services.length > 0 && (
+              <div class="case__role-block">
+                <p class="mono case__label">Что было сделано</p>
+                <ul class="case__services">
+                  {data.services.map((service) => (
+                    <li>{service}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {data.technologies.length > 0 && (
+              <div class="case__role-block">
+                <p class="mono case__label">Технологии</p>
+                <ul class="tag-list">
+                  {data.technologies.map((tech) => (
+                    <li class="tag">{tech}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )
+      }
+    </div>
+
+    <div class="container case__cover">
+      <MediaImage
+        src={data.cover.src}
+        alt={data.cover.alt || data.title}
+        sizes="(max-width: 1360px) 94vw, 1280px"
+        ratio="16 / 9"
+        priority
+      />
+      {data.cover.caption && <p class="case__cover-caption mono">{data.cover.caption}</p>}
+    </div>
+
+    <div class="container case__body">
+      {numberedBlocks.map((block) => (
+        <CaseSection index={block.index} title={block.title} id={block.id}>
+          {paragraphs(block.text).map((paragraph) => <p>{paragraph}</p>)}
+        </CaseSection>
+      ))}
+
+      {
+        data.gallery.length > 0 && (
+          <ProjectGallery items={data.gallery} title={data.title} />
+        )
+      }
+
+      {
+        data.websiteUrl && (
+          <div class="case__cta">
+            <div>
+              <p class="mono case__cta-label">Публичный адрес</p>
+              <p class="case__cta-url">{data.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}</p>
+            </div>
+            <a href={data.websiteUrl} class="btn btn--primary" target="_blank" rel="noopener noreferrer nofollow">
+              Посмотреть сайт
+              <Icon name="arrow-up-right" size={16} />
+            </a>
+          </div>
+        )
+      }
+
+      <ProjectNav prev={prev} next={next} />
+    </div>
+
+    <div class="container">
+      <section class="case__contact" aria-labelledby="case-contact-title">
+        <h2 class="case__contact-title" id="case-contact-title">Есть похожая задача? Обсудим.</h2>
+        <div class="case__contact-actions">
+          <a href="/#contact" class="btn btn--accent">
+            <Icon name="telegram" size={17} />
+            Написать в Telegram
+          </a>
+          <a href={`mailto:${site.email}?subject=${encodeURIComponent(`Проект: ${data.title}`)}`} class="btn btn--ghost">
+            <Icon name="mail" size={17} />
+            Написать на почту
+          </a>
+        </div>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .case {
+    padding-top: calc(var(--header-h) + clamp(2rem, 5vw, 4rem));
+  }
+
+  .case__head {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.75rem);
+  }
+
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--fs-sm);
+  }
+
+  .breadcrumbs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: var(--color-text-secondary);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+
+  .breadcrumbs__link:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs__index {
+    color: var(--color-text-muted);
+    font-size: 0.6875rem;
+  }
+
+  .case__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+    align-items: end;
+    gap: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .case__category {
+    color: var(--color-accent);
+    margin-bottom: 0.9rem;
+  }
+
+  .case__title {
+    font-size: var(--fs-3xl);
+    letter-spacing: var(--tracking-tight);
+    max-width: 22ch;
+  }
+
+  .case__summary {
+    margin-top: var(--space-5);
+    max-width: 52ch;
+    color: var(--color-text-secondary);
+    font-size: var(--fs-md);
+    line-height: 1.55;
+  }
+
+  .case__facts {
+    display: grid;
+    gap: 0.9rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .case__fact {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .case__fact:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .case__fact dt {
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+  }
+
+  .case__fact dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    text-align: right;
+  }
+
+  .case__role {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-top: clamp(1.25rem, 3vw, 2rem);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .case__label {
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .case__role-text {
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .case__services {
+    display: grid;
+    gap: 0.4rem;
+    font-size: var(--fs-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .case__services li {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .case__services li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+  }
+
+  .case__cover {
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .case__cover :global(img),
+  .case__cover :global(.media-image) {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+  }
+
+  .case__cover-caption {
+    margin-top: 0.85rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--color-text-muted);
+  }
+
+  .case__body {
+    margin-top: clamp(2.5rem, 5vw, 5rem);
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .case__cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(183, 108, 250, 0.1), rgba(172, 221, 204, 0.04)) , var(--color-surface);
+  }
+
+  .case__cta-label {
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.35rem;
+  }
+
+  .case__cta-url {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+    color: var(--color-text);
+    word-break: break-all;
+  }
+
+  .case__contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(80% 100% at 100% 0%, rgba(183, 108, 250, 0.18), transparent 60%),
+      var(--color-surface);
+  }
+
+  .case__contact-title {
+    font-size: var(--fs-xl);
+    max-width: 20ch;
+  }
+
+  .case__contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 860px) {
+    .case__intro {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .case__facts {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .case__contact-actions {
+      display: grid;
+      width: 100%;
+    }
+
+    .case__contact-actions :global(.btn) {
+      width: 100%;
+    }
+
+    .case__cta {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { mediaUrl } from '../lib/helpers';
+
+/**
+ * Изображение из CMS (public/media) с оптимизацией на этапе сборки.
+ * Если файла ещё нет (проект создан до загрузки обложки), показывается
+ * аккуратная заглушка — вёрстка не ломается.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  sizes?: string;
+  priority?: boolean;
+  class?: string;
+  /** Пропорции контейнера, например "16 / 10". */
+  ratio?: string;
+  fit?: 'cover' | 'contain';
+}
+
+const {
+  src,
+  alt,
+  sizes = '(max-width: 768px) 92vw, (max-width: 1280px) 60vw, 900px',
+  priority = false,
+  class: className,
+  ratio,
+  fit = 'cover',
+} = Astro.props;
+
+/**
+ * Находит файл по имени в папках медиа (пути заданы с корня проекта):
+ *  - src/assets — оптимизируются при сборке (основной вариант, туда пишет CMS);
+ *  - public/media — подключаются как есть.
+ */
+const assets = import.meta.glob<{ default: ImageMetadata }>([
+  '/src/assets/**/*.{png,jpg,jpeg,webp,avif}',
+], { eager: true });
+const publicFiles = import.meta.glob<{ default: ImageMetadata }>([
+  '/public/media/**/*.{png,jpg,jpeg,webp,avif}',
+], { eager: true });
+
+const fileName = (src || '').split('/').pop()?.toLowerCase() ?? '';
+const byName = (mods: Record<string, { default: ImageMetadata }>) =>
+  Object.entries(mods).find(([key]) => key.split('/').pop()?.toLowerCase() === fileName)?.[1].default;
+
+const file = fileName ? (byName(assets) ?? byName(publicFiles)) : undefined;
+const style = ratio ? `aspect-ratio:${ratio};` : undefined;
+
+/**
+ * Итоговый URL картинки для лайтбокса / data-src:
+ * public-файл — как есть (с учётом base path), иначе собранный Astro Asset.
+ */
+const fullSrc = file ? (publicFiles[`/public${src}`] ? mediaUrl(src) : file.src) : mediaUrl(src);
+---
+
+{
+  file ? (
+    <Image
+      src={file}
+      alt={alt}
+      widths={[480, 800, 1200, 1600, 2000]}
+      sizes={sizes}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding={priority ? 'sync' : 'async'}
+      class:list={['media-image', className]}
+      style={style}
+      format="webp"
+      quality={78}
+      fit={fit}
+      data-full-src={fullSrc}
+    />
+  ) : (
+    <span
+      class:list={['media-image', 'media-image--placeholder', className]}
+      style={style}
+      role="img"
+      aria-label={alt || 'Изображение проекта'}
+      data-full-src={fullSrc}
+    >
+      <span class="media-image__ph-label">Превью проекта</span>
+      <span class="media-image__ph-hint">загрузите изображение через CMS</span>
+      <span class="media-image__ph-glow" aria-hidden="true" />
+    </span>
+  )
+}
+
+<style>
+  .media-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media-image--placeholder {
+    position: relative;
+    display: grid;
+    place-content: center;
+    gap: 0.35rem;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: inherit;
+    background:
+      radial-gradient(80% 90% at 18% 10%, rgba(183, 108, 250, 0.28), transparent 60%),
+      radial-gradient(70% 80% at 90% 90%, rgba(172, 221, 204, 0.14), transparent 60%),
+      linear-gradient(150deg, #1b1d24, #121318 70%);
+    overflow: hidden;
+  }
+
+  .media-image__ph-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    opacity: 0.85;
+  }
+
+  .media-image__ph-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .media-image__ph-glow {
+    position: absolute;
+    inset: auto -20% -60% 40%;
+    height: 70%;
+    background: radial-gradient(closest-side, rgba(183, 108, 250, 0.35), transparent);
+    filter: blur(24px);
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+import { home, pad } from '../../lib/helpers';
+
+const { approach } = home;
+const steps = approach.steps.filter((step) => step.title?.trim());
+---
+
+<section class="approach section" id="approach" aria-labelledby="approach-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__top" data-reveal>
+        <span class="section-head__index mono">03</span>
+        <span class="section-head__label">{approach.eyebrow}</span>
+      </div>
+      <div class="section-head__row">
+        <h2 class="section-head__title" id="approach-title">
+          {approach.title}
+        </h2>
+        <p class="section-head__subtitle">{approach.subtitle}</p>
+      </div>
+    </div>
+
+    <ol class="approach__list">
+      {
+        steps.map((step, index) => (
+          <li class="approach-step" data-reveal style={`--reveal-delay: ${index * 90}ms`}>
+            <div class="approach-step__rail" aria-hidden="true">
+              <span class="approach-step__dot" />
+            </div>
+            <p class="approach-step__num mono">{pad(index + 1)}</p>
+            <h3 class="approach-step__title">{step.title}</h3>
+            {step.description && <p class="approach-step__desc">{step.description}</p>}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .approach {
+    position: relative;
+  }
+
+  .approach__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(0.75rem, 2vw, 2rem);
+    counter-reset: step;
+  }
+
+  .approach-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1.75rem;
+    min-width: 0;
+  }
+
+  .approach-step__rail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-line-strong);
+  }
+
+  .approach-step__dot {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 5px rgba(183, 108, 250, 0.12), 0 0 18px rgba(183, 108, 250, 0.6);
+    transform: translateY(-50%);
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .approach-step:last-child .approach-step__rail {
+    background: linear-gradient(90deg, var(--color-line-strong) 0%, var(--color-line-strong) 70%, transparent 100%);
+  }
+
+  .approach-step__num {
+    font-size: var(--fs-sm);
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+  }
+
+  .approach-step__title {
+    font-size: var(--fs-lg);
+    font-weight: 500;
+  }
+
+  .approach-step__desc {
+    max-width: 32ch;
+    color: var(--color-text-secondary);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .approach-step:hover .approach-step__dot {
+      transform: translateY(-50%) scale(1.25);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .approach__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--space-6);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .approach__list {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .approach-step {
+      padding: 1.25rem 0 1.5rem 1.75rem;
+    }
+
+    .approach-step__rail {
+      top: 0;
+      bottom: 0;
+      right: auto;
+      left: 0;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(180deg, var(--color-line-strong), transparent);
+    }
+
+    .approach-step:last-child .approach-step__rail {
+      background: linear-gradient(180deg, var(--color-line-strong), transparent);
+    }
+
+    .approach-step__dot {
+      top: 2.1rem;
+      left: 0;
+      transform: translate(-50%, 0);
+    }
+
+    .approach-step:hover .approach-step__dot {
+      transform: translate(-50%, 0) scale(1.2);
+    }
+  }
+</style>

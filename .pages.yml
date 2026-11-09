@@ -1,0 +1,418 @@
+# Конфигурация Pages CMS (https://pagescms.org)
+# Вход: https://app.pagescms.org — авторизация через GitHub.
+# CMS коммитит изменения прямо в репозиторий, GitHub Actions пересобирает сайт.
+
+media:
+  input: public/media
+  output: /media
+  categories: [image]
+  rename: safe
+
+content:
+  # ─────────────────────────────  Главная страница  ─────────────────────────────
+  - name: home
+    label: Главная страница
+    type: file
+    path: src/data/home.json
+
+    fields:
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись над заголовком
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+            required: true
+          - name: subtitle
+            label: Подзаголовок
+            type: text
+          - name: primaryCtaLabel
+            label: Текст первой кнопки
+            type: string
+          - name: primaryCtaHref
+            label: Ссылка первой кнопки
+            type: string
+          - name: secondaryCtaLabel
+            label: Текст второй кнопки
+            type: string
+          - name: secondaryCtaHref
+            label: Ссылка второй кнопки
+            type: string
+          - name: footnote
+            label: Подпись под кнопками
+            type: string
+
+      - name: work
+        label: Блок портфолио
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись раздела
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+          - name: subtitle
+            label: Описание
+            type: text
+          - name: allLinkLabel
+            label: Текст ссылки на архив
+            type: string
+          - name: allLinkHref
+            label: Ссылка на архив
+            type: string
+
+      - name: services
+        label: Блок услуг
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись раздела
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+          - name: subtitle
+            label: Описание
+            type: text
+
+      - name: approach
+        label: Подход к работе
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись раздела
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+          - name: subtitle
+            label: Описание
+            type: text
+          - name: steps
+            label: Этапы
+            type: object
+            list:
+              collapsible:
+                summary: "{title}"
+            fields:
+              - name: title
+                label: Название этапа
+                type: string
+                required: true
+              - name: description
+                label: Описание
+                type: text
+
+      - name: about
+        label: Блок «Обо мне»
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись раздела
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+          - name: text
+            label: Основной текст
+            type: text
+          - name: education
+            label: Строка об образовании
+            type: string
+
+      - name: contact
+        label: Блок контактов
+        type: object
+        fields:
+          - name: eyebrow
+            label: Подпись раздела
+            type: string
+          - name: title
+            label: Заголовок
+            type: string
+          - name: subtitle
+            label: Описание
+            type: text
+          - name: primaryCtaLabel
+            label: Основная кнопка
+            type: string
+          - name: secondaryCtaLabel
+            label: Дополнительная кнопка
+            type: string
+          - name: responseNote
+            label: Примечание
+            type: string
+
+  # ─────────────────────────────  Портфолио  ─────────────────────────────
+  - name: projects
+    label: Портфолио
+    type: collection
+    path: src/content/projects
+    filename:
+      template: "{primary}.md"
+      field: create
+    view:
+      primary: title
+      sort: order
+      order: asc
+      fields: [title, category, order, featured, published]
+    fields:
+      - name: title
+        label: Название проекта
+        type: string
+        required: true
+
+      - name: slug
+        label: Slug (адрес страницы)
+        description: "Латиница, цифры и дефисы. Например: mks-modul-karkas-stroy. Используется в URL /projects/<slug>/"
+        type: string
+        required: true
+
+      - name: category
+        label: Категория
+        description: "Можно выбрать несколько через запятую, например: Web Design, Landing Page"
+        type: string
+        required: true
+
+      - name: year
+        label: Год
+        type: number
+
+      - name: client
+        label: Клиент / компания
+        type: string
+
+      - name: summary
+        label: Краткое описание (для карточки)
+        type: text
+        required: true
+
+      - name: cover
+        label: Обложка
+        type: object
+        fields:
+          - name: src
+            label: Файл
+            type: image
+            required: true
+          - name: alt
+            label: Alt-текст
+            type: string
+          - name: caption
+            label: Подпись
+            type: string
+
+      - name: gallery
+        label: Галерея
+        type: object
+        list:
+          collapsible:
+            summary: "{alt} ({index})"
+        fields:
+          - name: src
+            label: Файл
+            type: image
+            required: true
+          - name: alt
+            label: Alt-текст
+            type: string
+          - name: caption
+            label: Подпись
+            type: string
+
+      - name: role
+        label: Роль в проекте
+        type: text
+
+      - name: services
+        label: Моё участие (список пунктов)
+        type: string
+        list: true
+
+      - name: technologies
+        label: Технологии
+        type: string
+        list: true
+
+      - name: overview
+        label: "01 / О проекте"
+        type: text
+
+      - name: challenge
+        label: "02 / Задача"
+        type: text
+
+      - name: solution
+        label: "03–04 / Моё участие и реализация"
+        type: text
+
+      - name: results
+        label: "06 / Результат"
+        type: text
+
+      - name: websiteUrl
+        label: Публичный URL сайта
+        type: string
+
+      - name: featured
+        label: Показывать в карусели на главной
+        type: boolean
+        default: true
+
+      - name: order
+        label: Порядок (меньше — раньше)
+        type: number
+        default: 99
+
+      - name: published
+        label: Опубликован
+        type: boolean
+        default: true
+
+      - name: seoTitle
+        label: SEO Title
+        type: string
+
+      - name: seoDescription
+        label: SEO Description
+        type: text
+
+      - name: ogImage
+        label: Open Graph изображение
+        description: "Необязательно. Если пусто — используется обложка."
+        type: image
+
+  # ─────────────────────────────  Услуги  ─────────────────────────────
+  - name: services
+    label: Услуги
+    type: file
+    path: src/data/services.json
+    list: true
+    fields:
+      - name: title
+        label: Название услуги
+        type: string
+        required: true
+      - name: icon
+        label: Иконка
+        type: select
+        default: code
+        options:
+          values:
+            - code
+            - search
+            - layers
+            - flow
+            - grid
+            - spark
+      - name: description
+        label: Описание
+        type: text
+      - name: features
+        label: Список возможностей
+        type: string
+        list: true
+
+  # ─────────────────────────────  Обо мне  ─────────────────────────────
+  - name: about
+    label: Обо мне / опыт и технологии
+    type: file
+    path: src/data/about.json
+    fields:
+      - name: experience
+        label: Профессиональный опыт
+        type: object
+        list:
+          collapsible:
+            summary: "{company} — {position}"
+        fields:
+          - name: company
+            label: Компания
+            type: string
+            required: true
+          - name: position
+            label: Должность
+            type: string
+          - name: period
+            label: Период
+            type: string
+          - name: description
+            label: Описание
+            type: text
+      - name: skills
+        label: Технологии по группам
+        type: object
+        list:
+          collapsible:
+            summary: "{group}"
+        fields:
+          - name: group
+            label: Название группы
+            type: string
+            required: true
+          - name: items
+            label: Инструменты
+            type: string
+            list: true
+
+  # ─────────────────────────────  Контакты и настройки  ─────────────────────────────
+  - name: site
+    label: Контакты и настройки сайта
+    type: file
+    path: src/data/site.json
+    fields:
+      - name: name
+        label: Имя
+        type: string
+        required: true
+      - name: monogram
+        label: Монограмма в шапке
+        type: string
+      - name: role
+        label: Специализация (коротко)
+        type: string
+      - name: title
+        label: Title главной страницы
+        type: string
+      - name: description
+        label: Description главной страницы
+        type: text
+      - name: url
+        label: Основной URL сайта
+        type: string
+      - name: basePath
+        label: Base path
+        description: "/Portfolio/ для project-сайта GitHub Pages, / для собственного домена"
+        type: string
+      - name: email
+        label: Email
+        type: string
+      - name: telegram
+        label: Telegram (ссылка)
+        type: string
+      - name: telegramHandle
+        label: Telegram (отображение)
+        type: string
+      - name: github
+        label: GitHub (ссылка)
+        type: string
+      - name: githubHandle
+        label: GitHub (отображение)
+        type: string
+      - name: ogImage
+        label: Социальное изображение
+        type: image
+      - name: favicon
+        label: Favicon (путь)
+        type: string
+      - name: lang
+        label: Язык (lang)
+        type: string
+      - name: locale
+        label: Open Graph locale
+        type: string
