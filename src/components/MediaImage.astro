@@ -30,7 +30,7 @@ const {
 } = Astro.props;
 
 /**
- * Находит файл по имени в папках медиа (пути заданы с корня проекта):
+ * Находит файл по имени в папках медиа:
  *  - src/assets — оптимизируются при сборке (основной вариант, туда пишет CMS);
  *  - public/media — подключаются как есть.
  */
@@ -41,7 +41,8 @@ const publicFiles = import.meta.glob<{ default: ImageMetadata }>([
   '/public/media/**/*.{png,jpg,jpeg,webp,avif}',
 ], { eager: true });
 
-const fileName = (src || '').split('/').pop()?.toLowerCase() ?? '';
+const normalizedSrc = (src || '').replace(/^\/+/, '');
+const fileName = normalizedSrc.split('/').pop()?.toLowerCase() ?? '';
 const byName = (mods: Record<string, { default: ImageMetadata }>) =>
   Object.entries(mods).find(([key]) => key.split('/').pop()?.toLowerCase() === fileName)?.[1].default;
 
@@ -52,7 +53,8 @@ const style = ratio ? `aspect-ratio:${ratio};` : undefined;
  * Итоговый URL картинки для лайтбокса / data-src:
  * public-файл — как есть (с учётом base path), иначе собранный Astro Asset.
  */
-const fullSrc = file ? (publicFiles[`/public${src}`] ? mediaUrl(src) : file.src) : mediaUrl(src);
+const publicFile = publicFiles[`/public/${normalizedSrc}`];
+const fullSrc = file ? (publicFile ? mediaUrl(normalizedSrc) : file.src) : mediaUrl(normalizedSrc);
 ---
 
 {

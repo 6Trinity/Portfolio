@@ -7,11 +7,11 @@ year: 2025
 client: "Tetriz Architects"
 summary: "Страница с презентационными материалами бюро: аккуратная подача документов и адаптивная вёрстка."
 cover:
-  src: "/media/projects/tetriz-tetriz-presentation.png"
+  src: "media/projects/tetriz-tetriz-presentation.png"
   alt: "Страница презентационных материалов Tetriz Architects"
   caption: "Страница презентационных материалов"
 gallery:
-  - src: "/media/projects/tetriz-tetriz-presentation.png"
+  - src: "media/projects/tetriz-tetriz-presentation.png"
     alt: "Верхняя часть страницы презентационных материалов"
     caption: "Верхняя часть страницы"
 role: "Веб-дизайн и фронтенд-доработка страницы в рамках работы над сайтом бюро."

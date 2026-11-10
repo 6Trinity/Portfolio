@@ -7,11 +7,11 @@ year: 2025
 client: "Tetriz Architects"
 summary: "Посадочная страница направления по капитальному ремонту фасадов: дизайн блоков и адаптивная вёрстка."
 cover:
-  src: "/media/projects/tetriz-tetriz-kapitalnyy-remont-fasadov.png"
+  src: "media/projects/tetriz-tetriz-kapitalnyy-remont-fasadov.png"
   alt: "Посадочная страница капитального ремонта фасадов"
   caption: "Посадочная страница направления"
 gallery:
-  - src: "/media/projects/tetriz-tetriz-kapitalnyy-remont-fasadov.png"
+  - src: "media/projects/tetriz-tetriz-kapitalnyy-remont-fasadov.png"
     alt: "Верхняя часть страницы капитального ремонта фасадов"
     caption: "Первый экран страницы"
 role: "Веб-дизайн и вёрстка страницы в рамках работы над сайтом бюро."

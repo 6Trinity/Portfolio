@@ -8,14 +8,14 @@ year: 2025
 client: "МКС — Модуль Каркас Строй"
 summary: "Многостраничный сайт строительной компании: структура, адаптивный интерфейс, интерактивные калькуляторы и техническое SEO."
 cover:
-  src: "/media/projects/mks-mks-modul-karkas-stroy.png"
+  src: "media/projects/mks-mks-modul-karkas-stroy.png"
   alt: "Главный экран сайта МКС — Модуль Каркас Строй"
   caption: "Главная страница сайта"
 gallery:
-  - src: "/media/projects/mks-mks-modul-karkas-stroy.png"
+  - src: "media/projects/mks-mks-modul-karkas-stroy.png"
     alt: "Первый экран сайта МКС — Модуль Каркас Строй"
     caption: "Первый экран: предложение и быстрый переход к расчёту"
-  - src: "/media/projects/mks-mks-modul-karkas-stroy-02.png"
+  - src: "media/projects/mks-mks-modul-karkas-stroy-02.png"
     alt: "Мобильная версия сайта МКС — Модуль Каркас Строй"
     caption: "Мобильная версия: адаптивная сетка и крупные элементы управления"
 role: "Web-разработчик / SEO-специалист: проектирование структуры, дизайн, вёрстка, интерактивные модули, техническое SEO"

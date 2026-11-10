@@ -122,9 +122,9 @@ export function absoluteUrl(path = '/'): string {
   return `${siteBase}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
-/** Абсолютный адрес медиафайла из CMS ("/media/..." → base + путь). */
+/** Адрес медиафайла из CMS (относительный путь → base + путь). */
 export function mediaUrl(path: string): string {
-  return url(path);
+  return url(path.replace(/^\/+/, ''));
 }
 
 /** Канонический путь страницы (без домена и base). */

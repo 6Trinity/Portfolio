@@ -7,11 +7,11 @@ year: 2025
 client: "Tetriz Architects"
 summary: "Посадочная страница направления «Реконструкция»: структура, текстовые блоки и поисковая оптимизация."
 cover:
-  src: "/media/projects/tetriz-tetriz-reconstruction.png"
+  src: "media/projects/tetriz-tetriz-reconstruction.png"
   alt: "Посадочная страница направления Реконструкция"
   caption: "Посадочная страница направления"
 gallery:
-  - src: "/media/projects/tetriz-tetriz-reconstruction.png"
+  - src: "media/projects/tetriz-tetriz-reconstruction.png"
     alt: "Верхняя часть страницы направления Реконструкция"
     caption: "Первый экран страницы"
 role: "SEO-специалист / веб-мастер: структура страницы и поисковая оптимизация в рамках работы над сайтом бюро."

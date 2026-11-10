@@ -4,7 +4,7 @@
 
 media:
   input: public/media
-  output: /media
+  output: media
   categories: [image]
   rename: safe
 

@@ -7,14 +7,14 @@ year: 2025
 client: "Tetriz Architects"
 summary: "Посадочная страница по одному из направлений компании: SEO-архитектура, разделение интентов и технические доработки на Tilda."
 cover:
-  src: "/media/projects/tetriz-tetriz-agr-moskva.png"
+  src: "media/projects/tetriz-tetriz-agr-moskva.png"
   alt: "Страница АГР Москва на сайте Tetriz Architects"
   caption: "Посадочная страница направления"
 gallery:
-  - src: "/media/projects/tetriz-tetriz-agr-moskva.png"
+  - src: "media/projects/tetriz-tetriz-agr-moskva.png"
     alt: "Верхняя часть посадочной страницы АГР Москва"
     caption: "Первый экран посадочной страницы"
-  - src: "/media/projects/tetriz-tetriz-agr-moskva-02.png"
+  - src: "media/projects/tetriz-tetriz-agr-moskva-02.png"
     alt: "Мобильная версия посадочной страницы АГР Москва"
     caption: "Мобильная версия страницы"
 role: "SEO-специалист / веб-мастер: структура коммерческой страницы, SEO-архитектура, технические доработки на Tilda"
