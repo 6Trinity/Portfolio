@@ -1,5 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { toSlug } from './helpers';
+import { toSlug, url } from './helpers';
 
 export type Project = CollectionEntry<'projects'>;
 export type ProjectData = Project['data'];
@@ -17,7 +17,7 @@ function makeView(entry: Project): ProjectView {
     entry,
     slug,
     data: entry.data,
-    href: `/projects/${slug}/`,
+    href: url(`/projects/${slug}/`),
   };
 }
 

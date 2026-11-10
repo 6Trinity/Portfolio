@@ -1,7 +1,7 @@
 ---
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import { site } from '../lib/helpers';
+import { site, url } from '../lib/helpers';
 
 interface Props {
   overlay?: boolean;
@@ -20,7 +20,7 @@ const links = [
 
 <header class:list={['site-header', { 'site-header--overlay': overlay }]} data-header>
   <div class="site-header__inner container">
-    <a href="/" class="site-header__brand" aria-label={`${site.name} — на главную`}>
+    <a href={url('/')} class="site-header__brand" aria-label={`${site.name} — на главную`}>
       <Logo gradientId="logo-grad-header" />
     </a>
 
@@ -29,7 +29,7 @@ const links = [
         {
           links.map((link) => (
             <li>
-              <a href={link.href} class="nav-link" data-nav-link>
+              <a href={url(link.href)} class="nav-link" data-nav-link>
                 {link.label}
               </a>
             </li>
@@ -39,9 +39,14 @@ const links = [
     </nav>
 
     <div class="site-header__actions">
-      <a href="/#contact" class="btn btn--accent btn--sm site-header__cta" data-nav-link>
-        Обсудить проект
-        <Icon name="arrow-up-right" size={15} />
+      <a
+        href={url('/#contact')}
+        class="btn btn--accent btn--sm btn--round site-header__cta"
+        data-nav-link
+        aria-label="Обсудить проект"
+        title="Обсудить проект"
+      >
+        <Icon name="arrow-up-right" size={16} />
       </a>
 
       <button
@@ -76,7 +81,7 @@ const links = [
         {
           links.map((link, index) => (
             <li>
-              <a href={link.href} class="mobile-menu__link" data-nav-link data-menu-link>
+              <a href={url(link.href)} class="mobile-menu__link" data-nav-link data-menu-link>
                 <span class="mobile-menu__index mono">{String(index + 1).padStart(2, '0')}</span>
                 <span class="mobile-menu__text">{link.label}</span>
                 <Icon name="arrow-up-right" size={18} class="mobile-menu__arrow" />
@@ -88,7 +93,7 @@ const links = [
     </nav>
 
     <div class="mobile-menu__foot">
-      <a href="/#contact" class="btn btn--accent btn--block" data-nav-link data-menu-link>
+      <a href={url('/#contact')} class="btn btn--accent btn--block" data-nav-link data-menu-link>
         Обсудить проект
         <Icon name="arrow-right" size={16} />
       </a>

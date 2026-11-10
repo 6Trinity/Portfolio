@@ -33,7 +33,7 @@ results: ""
 websiteUrl: "https://te-triz.com/kapitalnyy-remont-fasadov"
 featured: true
 order: 5
-published: true
+published: false
 seoTitle: "Tetriz Architects — Капитальный ремонт фасадов: дизайн и вёрстка"
 seoDescription: "Кейс: посадочная страница «Капитальный ремонт фасадов» для Tetriz Architects — дизайн блоков, адаптивная вёрстка, доработка интерфейса."
 ogImage: ""

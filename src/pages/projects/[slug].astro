@@ -6,7 +6,7 @@ import MediaImage from '../../components/MediaImage.astro';
 import CaseSection from '../../components/CaseSection.astro';
 import ProjectGallery from '../../components/ProjectGallery.astro';
 import ProjectNav from '../../components/ProjectNav.astro';
-import { absoluteUrl, site } from '../../lib/helpers';
+import { absoluteUrl, site, url } from '../../lib/helpers';
 import { getNeighbours, getPublishedProjects, type ProjectView } from '../../lib/projects';
 import { graph, breadcrumbSchema, personSchema, projectSchema, websiteSchema } from '../../lib/seo';
 
@@ -76,7 +76,7 @@ const jsonLd = graph(
   <article class="case">
     <div class="container case__head">
       <nav class="breadcrumbs" aria-label="Хлебные крошки">
-        <a href="/projects/" class="breadcrumbs__link">
+        <a href={url('/projects/')} class="breadcrumbs__link">
           <Icon name="arrow-left" size={14} />
           Назад к работам
         </a>
@@ -186,9 +186,8 @@ const jsonLd = graph(
       <section class="case__contact" aria-labelledby="case-contact-title">
         <h2 class="case__contact-title" id="case-contact-title">Есть похожая задача? Обсудим.</h2>
         <div class="case__contact-actions">
-          <a href="/#contact" class="btn btn--accent">
-            <Icon name="telegram" size={17} />
-            Написать в Telegram
+          <a href={url('/#contact')} class="btn btn--accent btn--round" aria-label="Написать в Telegram" title="Написать в Telegram">
+            <Icon name="telegram" size={18} />
           </a>
           <a href={`mailto:${site.email}?subject=${encodeURIComponent(`Проект: ${data.title}`)}`} class="btn btn--ghost">
             <Icon name="mail" size={17} />
@@ -427,11 +426,12 @@ const jsonLd = graph(
 
   @media (max-width: 560px) {
     .case__contact-actions {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       width: 100%;
     }
 
-    .case__contact-actions :global(.btn) {
+    .case__contact-actions :global(.btn:not(.btn--round)) {
       width: 100%;
     }
 

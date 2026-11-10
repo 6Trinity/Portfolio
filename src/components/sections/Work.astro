@@ -1,7 +1,7 @@
 ---
 import Icon from '../Icon.astro';
 import MediaImage from '../MediaImage.astro';
-import { home, pad } from '../../lib/helpers';
+import { home, pad, url } from '../../lib/helpers';
 import type { ProjectView } from '../../lib/projects';
 
 interface Props {
@@ -26,7 +26,7 @@ const total = projects.length;
         </h2>
         <div class="work__head-aside">
           <p class="section-head__subtitle">{work.subtitle}</p>
-          <a href={work.allLinkHref} class="link-arrow work__all work__all--top">
+          <a href={url(work.allLinkHref)} class="link-arrow work__all work__all--top">
             {work.allLinkLabel}
             <span class="mono">({pad(total)})</span>
             <Icon name="arrow-up-right" size={14} />
@@ -117,7 +117,7 @@ const total = projects.length;
           </div>
 
           <div class="work__buttons">
-            <a href={work.allLinkHref} class="link-arrow work__all work__all--bottom">
+            <a href={url(work.allLinkHref)} class="link-arrow work__all work__all--bottom">
               {work.allLinkLabel}
               <Icon name="arrow-up-right" size={14} />
             </a>
@@ -215,6 +215,11 @@ const total = projects.length;
     height: 100%;
     border-radius: var(--radius-lg);
     transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  /* Боковые карточки не открывают проект — клик по ним прокручивает карусель. */
+  .work-card:not(.is-active) .work-card__link {
+    cursor: pointer;
   }
 
   .work-card__media {

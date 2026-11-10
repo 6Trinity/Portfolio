@@ -1,6 +1,6 @@
 ---
 import Icon from '../Icon.astro';
-import { home } from '../../lib/helpers';
+import { home, url } from '../../lib/helpers';
 
 const { hero } = home;
 ---
@@ -22,11 +22,11 @@ const { hero } = home;
       </p>
 
       <div class="hero__actions" data-reveal style="--reveal-delay: 300ms">
-        <a href={hero.primaryCtaHref} class="btn btn--primary">
+        <a href={url(hero.primaryCtaHref)} class="btn btn--ghost">
           {hero.primaryCtaLabel}
           <Icon name="arrow-down" size={17} />
         </a>
-        <a href={hero.secondaryCtaHref} class="btn btn--ghost">
+        <a href={url(hero.secondaryCtaHref)} class="btn btn--accent">
           {hero.secondaryCtaLabel}
           <Icon name="arrow-up-right" size={16} />
         </a>
@@ -53,11 +53,6 @@ const { hero } = home;
       </div>
     </div>
   </div>
-
-  <div class="hero__scroll container" aria-hidden="true">
-    <span class="hero__scroll-line"></span>
-    <span class="mono">scroll</span>
-  </div>
 </section>
 
 <style>
@@ -66,8 +61,9 @@ const { hero } = home;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: min(100svh, 940px);
-    padding-block: calc(var(--header-h) + clamp(2rem, 6vh, 4.5rem)) clamp(2rem, 5vh, 3.5rem);
+    /* Первый экран целиком помещается в окно без прокрутки. */
+    min-height: 100svh;
+    padding-block: calc(var(--header-h) + clamp(1.25rem, 3.5vh, 2.5rem)) clamp(1.5rem, 3.5vh, 2.5rem);
     overflow: clip;
   }
 
@@ -88,7 +84,7 @@ const { hero } = home;
     display: inline-flex;
     align-items: center;
     gap: 0.7rem;
-    margin-bottom: clamp(1.25rem, 2.4vw, 2rem);
+    margin-bottom: clamp(1rem, 2vw, 1.5rem);
     padding: 0.5rem 0.95rem 0.5rem 0.75rem;
     border: 1px solid var(--color-line);
     border-radius: var(--radius-pill);
@@ -132,7 +128,7 @@ const { hero } = home;
   }
 
   .hero__title {
-    margin-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
+    margin-bottom: clamp(1rem, 1.8vw, 1.5rem);
   }
 
   .hero__title :global(em) {
@@ -154,14 +150,14 @@ const { hero } = home;
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    margin-top: clamp(1.5rem, 2.5vw, 2rem);
   }
 
   .hero__footnote {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-top: clamp(1.75rem, 3vw, 2.5rem);
+    margin-top: clamp(1.25rem, 2.5vw, 2rem);
     font-family: var(--font-mono);
     font-size: var(--fs-xs);
     letter-spacing: 0.08em;
@@ -179,7 +175,8 @@ const { hero } = home;
     position: relative;
     aspect-ratio: 1 / 1;
     width: 100%;
-    max-width: 620px;
+    /* Не выше доступной высоты экрана — иначе первый экран уходит в скролл. */
+    max-width: min(620px, calc(100svh - var(--header-h) - 6rem));
     justify-self: end;
     transform: translate3d(calc(var(--px, 0) * 10px), calc((var(--py, 0) * 10px) - var(--scroll, 0) * 40px), 0);
     transition: transform 900ms var(--ease-out);
@@ -262,44 +259,6 @@ const { hero } = home;
     text-align: right;
   }
 
-  /* ── Подсказка «scroll» ── */
-  .hero__scroll {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: clamp(1.5rem, 4vh, 3rem);
-    color: var(--color-text-muted);
-  }
-
-  .hero__scroll-line {
-    position: relative;
-    width: 56px;
-    height: 1px;
-    background: var(--color-line-strong);
-    overflow: hidden;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__scroll-line::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-      transform: translateX(-100%);
-      animation: hero-scroll 2.8s var(--ease-in-out) infinite;
-    }
-  }
-
-  @keyframes hero-scroll {
-    0% {
-      transform: translateX(-100%);
-    }
-    60%,
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
   /* ── Адаптив ── */
   @media (max-width: 1100px) {
     .hero__grid {
@@ -309,8 +268,8 @@ const { hero } = home;
 
   @media (max-width: 860px) {
     .hero {
-      min-height: auto;
-      padding-top: calc(var(--header-h) + 2.5rem);
+      min-height: 100svh;
+      padding-top: calc(var(--header-h) + 1.5rem);
     }
 
     .hero__grid {
@@ -322,17 +281,14 @@ const { hero } = home;
       max-width: 100%;
     }
 
+    /* На узком экране объект не должен выталкивать кнопки за пределы окна. */
     .hero__visual {
       justify-self: center;
-      width: min(78%, 380px);
+      width: min(78%, 380px, 34svh);
       max-width: none;
     }
 
     .hero__visual-coords {
-      display: none;
-    }
-
-    .hero__scroll {
       display: none;
     }
   }
@@ -353,7 +309,7 @@ const { hero } = home;
     }
 
     .hero__visual {
-      width: min(58%, 240px);
+      width: min(58%, 240px, 26svh);
     }
 
     .hero__footnote {

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { absoluteUrl } from '../lib/helpers';
+import { absoluteUrl, url } from '../lib/helpers';
 ---
 
 <BaseLayout
@@ -27,11 +27,11 @@ import { absoluteUrl } from '../lib/helpers';
           откройте список работ.
         </p>
         <div class="notfound__actions">
-          <a href="/" class="btn btn--primary">
+          <a href={url('/')} class="btn btn--primary">
             На главную
             <Icon name="arrow-right" size={16} />
           </a>
-          <a href="/projects/" class="btn btn--ghost">
+          <a href={url('/projects/')} class="btn btn--ghost">
             Все проекты
             <Icon name="arrow-up-right" size={16} />
           </a>

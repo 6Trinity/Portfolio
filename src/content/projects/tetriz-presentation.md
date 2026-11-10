@@ -33,7 +33,7 @@ results: ""
 websiteUrl: "https://te-triz.com/presentation"
 featured: true
 order: 3
-published: true
+published: false
 seoTitle: "Tetriz Architects — Презентационные материалы: веб-дизайн и фронтенд"
 seoDescription: "Кейс: страница презентационных материалов для архитектурного бюро Tetriz Architects — оформление, адаптивная вёрстка, доработка интерфейса."
 ogImage: ""

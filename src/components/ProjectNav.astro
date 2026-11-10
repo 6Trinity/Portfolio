@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import { url } from '../lib/helpers';
 import type { ProjectView } from '../lib/projects';
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
   allHref?: string;
 }
 
-const { prev, next, allHref = '/projects/' } = Astro.props;
+const { prev, next, allHref = url('/projects/') } = Astro.props;
 ---
 
 <nav class="project-nav" aria-label="Навигация по проектам">

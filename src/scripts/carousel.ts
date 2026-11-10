@@ -107,7 +107,18 @@ function initCarousel(root: HTMLElement, options: CarouselOptions = {}) {
 
   // Стрелки клавиатуры, когда фокус внутри карусели.
   track.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
+    if (event.key === 'Enter') {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const link = target.closest<HTMLAnchorElement>('a[href]');
+      const slide = target.closest<HTMLElement>('[data-carousel-slide]');
+      if (!link || !slide) return;
+      const index = slides.indexOf(slide);
+      if (index === -1 || index === nearestIndex()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      goTo(index);
+    } else if (event.key === 'ArrowRight') {
       event.preventDefault();
       goTo(activeIndex + 1);
     } else if (event.key === 'ArrowLeft') {
@@ -172,9 +183,27 @@ function initCarousel(root: HTMLElement, options: CarouselOptions = {}) {
     moved = false;
   };
 
+  // Клик по боковой карточке не открывает проект, а прокручивает к ней карусель.
+  // Перехватываем на фазе захвата: ссылка внутри карточки не должна успеть
+  // начать переход. Клик после drag блокируется отдельным обработчиком выше.
+  track.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const slide = target.closest<HTMLElement>('[data-carousel-slide]');
+      if (!slide) return;
+      const index = slides.indexOf(slide);
+      if (index === -1 || index === nearestIndex()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      goTo(index);
+    },
+    { capture: true },
+  );
+
   track.addEventListener('pointerup', endDrag);
   track.addEventListener('pointercancel', endDrag);
-  track.addEventListener('pointerleave', endDrag);
   track.addEventListener('dragstart', (event) => event.preventDefault());
 
   // Стартовое состояние.

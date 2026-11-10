@@ -1,4 +1,9 @@
-────────────────────────────────────────────────────────────── */
+/* ==========================================================================
+   UI-компоненты
+   ========================================================================== */
+
+/* ── Кнопки ─────────────────────────────────────────────────────────────── */
+
 .btn {
   --btn-bg: transparent;
   --btn-fg: var(--color-text);
@@ -57,8 +62,8 @@
 }
 
 .btn--primary:hover {
-  background: #ffffff;
-  box-shadow: 0 10px 36px -12px rgba(244, 243, 240, 0.45);
+  background: #e9e8e4;
+  box-shadow: 0 10px 30px -16px rgba(244, 243, 240, 0.28);
 }
 
 .btn--accent {
@@ -72,6 +77,29 @@
 .btn--accent:hover {
   --btn-border: rgba(236, 111, 210, 0.8);
   box-shadow: 0 16px 50px -16px rgba(183, 108, 250, 0.95);
+}
+
+/* Круглая кнопка-CTA: «Обсудить проект» и подобные. */
+.btn--round {
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  padding: 0;
+  width: 52px;
+  flex: none;
+}
+
+.btn--round.btn--sm {
+  width: 42px;
+}
+
+.btn--round svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn--round:hover svg {
+  transform: none;
 }
 
 .btn--ghost {

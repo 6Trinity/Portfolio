@@ -22,9 +22,15 @@ const mailto = `mailto:${site.email}?subject=${encodeURIComponent('Обсужд�
         <p class="contact__subtitle">{contact.subtitle}</p>
 
         <div class="contact__actions">
-          <a href={site.telegram} class="btn btn--accent" target="_blank" rel="noopener noreferrer">
-            <Icon name="telegram" size={17} />
-            {contact.primaryCtaLabel}
+          <a
+            href={site.telegram}
+            class="btn btn--accent btn--round"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={contact.primaryCtaLabel}
+            title={contact.primaryCtaLabel}
+          >
+            <Icon name="telegram" size={18} />
           </a>
           <a href={mailto} class="btn btn--ghost">
             <Icon name="mail" size={17} />
@@ -244,12 +250,12 @@ const mailto = `mailto:${site.email}?subject=${encodeURIComponent('Обсужд�
 
   @media (max-width: 560px) {
     .contact__actions {
-      display: grid;
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-wrap: wrap;
       width: 100%;
     }
 
-    .contact__actions :global(.btn) {
+    .contact__actions :global(.btn:not(.btn--round)) {
       width: 100%;
     }
   }

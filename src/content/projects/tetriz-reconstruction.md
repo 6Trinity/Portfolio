@@ -32,7 +32,7 @@ results: ""
 websiteUrl: "https://te-triz.com/reconstruction"
 featured: true
 order: 4
-published: true
+published: false
 seoTitle: "Tetriz Architects — Реконструкция: посадочная страница и SEO"
 seoDescription: "Кейс: посадочная страница направления «Реконструкция» для Tetriz Architects — структура, метаданные и внутренняя перелинковка."
 ogImage: ""

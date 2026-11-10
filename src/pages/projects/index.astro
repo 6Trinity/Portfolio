@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import MediaImage from '../../components/MediaImage.astro';
-import { absoluteUrl, pad } from '../../lib/helpers';
+import { absoluteUrl, pad, url } from '../../lib/helpers';
 import { getPublishedProjects } from '../../lib/projects';
 import { graph, breadcrumbSchema, personSchema, projectListSchema, websiteSchema } from '../../lib/seo';
 
@@ -25,7 +25,7 @@ const jsonLd = graph(
 <BaseLayout title={title} description={description} canonical={absoluteUrl('/projects/')} jsonLd={jsonLd} page="archive">
   <div class="archive">
     <div class="container archive__head">
-      <a href="/" class="breadcrumbs__link">
+      <a href={url('/')} class="breadcrumbs__link">
         <Icon name="arrow-left" size={14} />
         На главную
       </a>
@@ -88,9 +88,8 @@ const jsonLd = graph(
         <h2 class="archive__cta-title">Нужен сайт или техническая оптимизация?</h2>
         <p class="archive__cta-text">Расскажите о задаче — предложу структуру и план работ.</p>
       </div>
-      <a href="/#contact" class="btn btn--accent">
-        <Icon name="telegram" size={17} />
-        Обсудить проект
+      <a href={url('/#contact')} class="btn btn--accent btn--round" aria-label="Обсудить проект" title="Обсудить проект">
+        <Icon name="arrow-up-right" size={18} />
       </a>
     </div>
   </div>
