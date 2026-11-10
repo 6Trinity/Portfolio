@@ -38,11 +38,8 @@ jobs:
       - name: Build site
         run: npm run build
         env:
-          # Для project-сайта GitHub Pages: https://<user>.github.io/<repo>/
-          # Для собственного домена задайте в Settings → Variables:
-          #   SITE_URL = https://example.com, BASE_PATH = /
-          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
-          BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
+          SITE_URL: https://martynov.space
+          BASE_PATH: /
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

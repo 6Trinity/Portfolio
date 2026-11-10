@@ -5,15 +5,13 @@ import {
 import sitemap from '@astrojs/sitemap';
 
 /**
- * Домен и base path можно переопределить переменными окружения:
- *  - SITE_URL  — основной адрес сайта (собственный домен или https://<user>.github.io)
- *  - BASE_PATH — подкаталог для project-сайта GitHub Pages (например, /Portfolio),
- *                для собственного домена — "/", для user-сайта — "/".
- * По умолчанию настроено под https://6trinity.github.io/Portfolio/
+ * По умолчанию настроено для собственного домена martynov.space.
+ * Для локальной проверки GitHub Pages project-сайта можно задать:
+ *  - SITE_URL=https://<user>.github.io
+ *  - BASE_PATH=/<repo>/
  */
-const SITE_URL = (process.env.SITE_URL || 'https://6trinity.github.io').replace(/\/$/, '');
-const BASE_PATH =
-  process.env.BASE_PATH === undefined ? '/Portfolio/' : process.env.BASE_PATH;
+const SITE_URL = (process.env.SITE_URL || 'https://martynov.space').replace(/\/$/, '');
+const BASE_PATH = process.env.BASE_PATH === undefined ? '/' : process.env.BASE_PATH;
 
 export default defineConfig({
   site: SITE_URL,

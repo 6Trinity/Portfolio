@@ -66,22 +66,22 @@
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321/Portfolio/
+npm run dev        # http://localhost:4321/
 npm run build      # сборка в dist/
 npm run preview    # предпросмотр собранного сайта
 npm run check      # проверка типов (astro check)
 ```
 
-> Сайт собирается с `base: /Portfolio/`, поэтому в dev-режиме адрес —
-> `http://localhost:4321/Portfolio/`. Для работы без подкаталога:
-> `$env:BASE_PATH="/"; npm run dev` (PowerShell).
+По умолчанию сайт собирается для `https://martynov.space/` с корневым base path `/`.
+Для локальной проверки GitHub Pages project-сайта задайте `$env:SITE_URL` и
+`$env:BASE_PATH` перед запуском (PowerShell).
 
 ### Переменные окружения
 
 | Переменная | По умолчанию | Назначение |
 |---|---|---|
-| `SITE_URL` | `https://6trinity.github.io` | Домен для canonical, OG, sitemap |
-| `BASE_PATH` | `/Portfolio/` | Подкаталог публикации (`/` для своего домена) |
+| `SITE_URL` | `https://martynov.space` | Домен для canonical, OG, sitemap |
+| `BASE_PATH` | `/` | Base path публикации; для project-сайта — `/<repo>/` |
 
 Внутренние ссылки в компонентах формируйте через `url()` из `src/lib/helpers.ts`,
 чтобы они учитывали `BASE_PATH`.
@@ -95,15 +95,14 @@ npm run check      # проверка типов (astro check)
 3. Workflow `.github/workflows/deploy.yml` соберёт сайт и опубликует `dist/`.
    Сборка идёт только при успешном `npm run check` и `npm run build` — при ошибке
    публикации не будет.
-4. Адрес по умолчанию: `https://<user>.github.io/<repo>/`.
+4. Workflow публикует сайт на `https://martynov.space/` с корневым путём.
 
-### Собственный домен
+### GitHub Pages / собственный домен
 
-1. **Settings → Pages → Custom domain** — укажите домен.
-2. **Settings → Secrets and variables → Actions → Variables:**
-   - `SITE_URL` = `https://example.com`
-   - `BASE_PATH` = `/`
-3. Перезапустите workflow. Canonical, sitemap и OG-ссылки пересчитаются автоматически.
+В **Settings → Pages → Custom domain** укажите `martynov.space` и включите
+**Enforce HTTPS**, когда сертификат будет готов. Файл `public/CNAME` добавляется
+в публикацию автоматически. Workflow собирает для корня домена; пути ресурсов
+и внутренние ссылки не содержат `/Portfolio/`.
 
 Перенос на другой статический хостинг (Netlify, Cloudflare Pages, Vercel) не требует
 изменения кода: достаточно `npm run build` и публикации папки `dist/`.
