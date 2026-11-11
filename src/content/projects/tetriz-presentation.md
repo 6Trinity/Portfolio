@@ -7,7 +7,7 @@ client: Tetriz Architects
 summary: "Страница с презентационными материалами бюро: аккуратная подача
   документов и адаптивная вёрстка."
 cover:
-  src: media/bc-smola.webp
+  src: media/izv.webp
   alt: Страница презентационных материалов Tetriz Architects
   caption: Страница презентационных материалов
 gallery:
@@ -41,7 +41,7 @@ results: Готовый сайт архитектурной презентаци
   стиле. Четко показывает подход бюро и его философию через архитектуру.
 websiteUrl: https://te-triz.com/presentation
 featured: true
-order: 2
+order: 1
 published: true
 seoTitle: "Tetriz Architects — Презентационные материалы: веб-дизайн и фронтенд"
 seoDescription: "Кейс: страница презентационных материалов для архитектурного
