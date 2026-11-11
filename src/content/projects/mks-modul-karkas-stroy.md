@@ -1,6 +1,6 @@
 ---
 title: МКС — Модуль Каркас Строй
-slug: https://modulkarkas.ru/
+slug: modulkarkas
 category: Web Development, UI/UX, SEO
 year: 2025
 client: МКС — Модуль Каркас Строй
