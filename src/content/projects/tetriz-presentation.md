@@ -41,7 +41,7 @@ results: Готовый сайт архитектурной презентаци
   стиле. Четко показывает подход бюро и его философию через архитектуру.
 websiteUrl: https://te-triz.com/presentation
 featured: true
-order: 3
+order: 2
 published: true
 seoTitle: "Tetriz Architects — Презентационные материалы: веб-дизайн и фронтенд"
 seoDescription: "Кейс: страница презентационных материалов для архитектурного
