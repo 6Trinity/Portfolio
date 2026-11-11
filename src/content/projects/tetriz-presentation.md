@@ -7,7 +7,7 @@ client: Tetriz Architects
 summary: "Страница с презентационными материалами бюро: аккуратная подача
   документов и адаптивная вёрстка."
 cover:
-  src: media/photo2026-11-1114-25-20.jpg
+  src: media/bc-smola.webp
   alt: Страница презентационных материалов Tetriz Architects
   caption: Страница презентационных материалов
 gallery:
