@@ -1,6 +1,6 @@
 ---
 title: Tetriz Architects — Презентационные материалы
-slug: https://te-triz.com/presentation
+slug: te-triz.com_presentation
 category: Web Design, Landing Page
 year: 2026
 client: Tetriz Architects
