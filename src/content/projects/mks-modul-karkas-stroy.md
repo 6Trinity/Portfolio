@@ -69,7 +69,7 @@ results: >
   владельцем сайта.
 websiteUrl: https://modulkarkas.ru/
 featured: true
-order: 2
+order: 3
 published: true
 seoTitle: "МКС — Модуль Каркас Строй: разработка сайта и техническое SEO"
 seoDescription: "Кейс: многостраничный сайт строительной компании МКС —
