@@ -1,6 +1,6 @@
 ---
 title: Tetriz Architects — АГР
-slug: https://te-triz.com/agr
+slug: agr
 category: Web Design, Landing Page
 year: 2026
 client: Tetriz Architects
