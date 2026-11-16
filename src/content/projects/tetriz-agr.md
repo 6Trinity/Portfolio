@@ -42,7 +42,7 @@ results: Готовый сайт архитектурной бюро в напр
   подход бюро и его философию через архитектуру в услуге АГР.
 websiteUrl: https://te-triz.com/agr
 featured: true
-order: 6
+order: 4
 published: true
 seoTitle: "Tetriz Architects — Лендинг АГР: веб-дизайн и фронтенд"
 seoDescription: "Кейс: страница лендинга АГР для архитектурного бюро Tetriz
