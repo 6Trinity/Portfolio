@@ -63,7 +63,7 @@ results: >-
 websiteUrl: https://modulkarkas.ru/
 featured: true
 order: 2
-published: false
+published: true
 seoTitle: "МКС — Модуль Каркас Строй: разработка сайта на tilda и техническое SEO"
 seoDescription: "Кейс: многостраничный сайт строительной компании МКС —
   структура, адаптивный интерфейс, интерактивные калькуляторы, техническое SEO и
